@@ -52,13 +52,13 @@ while True:
 
             # do actions
 
-            if average_RH < low_RH_thres and state_on > -2:
+            if average_RH < low_RH_thres and state_on > -1:
 
                 r = requests.get(AC_off_URL)
                 # print 'Turn off A/C'
                 state_on -= 1
 
-            elif average_RH > high_RH_thres and state_on < 2:
+            elif average_RH > high_RH_thres and state_on < 1:
 
                 r = requests.get(AC_on_URL)
                 # print 'Turn on A/C'
