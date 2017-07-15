@@ -10,6 +10,10 @@ history_max_len = 2
 low_HI_thres = 78.7
 high_HI_thres = 79
 
+[RH]
+low_RH_thres = 48
+high_RH_thres = 58
+
 [Webhook]
 AC_off = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
 AC_on = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
