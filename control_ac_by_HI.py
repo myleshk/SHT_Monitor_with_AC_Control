@@ -34,7 +34,7 @@ while True:
     temperature = sht.read_t()
 
     if humidity is not None and temperature is not None:
-        HI = Common.heatIndex(temperature, humidity)
+        HI = Common().heatIndex(temperature, humidity)
         history.append(HI)
 
         # check for action
