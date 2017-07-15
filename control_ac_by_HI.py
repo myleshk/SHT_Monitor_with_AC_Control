@@ -8,10 +8,12 @@ from datetime import datetime
 import configparser
 import collections
 import requests
+from common import Common
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 
+check_interval_sec = int(config['Common']['check_interval_sec'])
 history_max_len = int(config['Common']['history_max_len'])
 low_HI_thres = float(config['HI']['low_HI_thres'])
 high_HI_thres = float(config['HI']['high_HI_thres'])
@@ -21,23 +23,6 @@ AC_on_URL = config['Webhook']['AC_on']
 state_on = 0  # 0 for unknown, 1 for on, -1 for off
 
 sht = Sht(config['Hardware']['SCK_BCM_num'], config['Hardware']['DATA_BCM_num'])
-
-def heatIndex(T_C, R):
-    T_F = T_C * 1.8 + 32
-
-    c1 = -42.379
-    c2 = 2.04901523
-    c3 = 10.14333127
-    c4 = -0.22475541
-    c5 = -6.83783e-3
-    c6 = -5.481717e-2
-    c7 = 1.22874e-3
-    c8 = 8.5282e-4
-    c9 = -1.99e-6
-
-    return c1 + c2 * T_F + c3 * R + c4 * T_F * R + c5 * T_F ** 2 + c6 \
-        * R ** 2 + c7 * T_F ** 2 * R + c8 * T_F * R ** 2 + c9 * T_F \
-        ** 2 * R ** 2
 
 history = collections.deque(maxlen=history_max_len)
 
@@ -49,7 +34,7 @@ while True:
     temperature = sht.read_t()
 
     if humidity is not None and temperature is not None:
-        HI = heatIndex(temperature, humidity)
+        HI = Common.heatIndex(temperature, humidity)
         history.append(HI)
 
         # check for action
@@ -85,5 +70,4 @@ while True:
 
         print '{:s}  Failed to get reading. Try again!'.format(ts)
 
-    time.sleep(int(config['Common']['check_interval_sec']))
-
+    time.sleep(check_interval_sec)
