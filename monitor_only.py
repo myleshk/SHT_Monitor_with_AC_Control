@@ -23,7 +23,8 @@ while True:
 
     if humidity is not None and temperature is not None:
         HI = Common().heatIndex(temperature, humidity)
-
+        # report
+        cm.reportRecord(temperature, humidity)
         print '{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}'.format(ts, temperature, humidity, HI)
     else:
 

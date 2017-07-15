@@ -17,3 +17,6 @@ high_RH_thres = 58
 [Webhook]
 AC_off = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
 AC_on = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
+
+[Firebase]
+db_location = https://your-database-url.firebaseio.com/
