@@ -32,6 +32,6 @@ class Common:
         if AC_state is None:
             data = {timestamp: {"RH": humidity, "T_C": temperature}}
         else:
-            data = {timestamp: {"RH": humidity, "T_C": temperature, "AC": AC_state}
+            data = {timestamp: {"RH": humidity, "T_C": temperature, "AC": AC_state}}
 
         self.fb.post('/records', data)
