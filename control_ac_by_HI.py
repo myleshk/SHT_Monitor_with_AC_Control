@@ -5,24 +5,21 @@ import sys
 import time
 from sht_sensor import Sht
 from datetime import datetime
-import configparser
 import collections
 import requests
 from common import Common
 
-config = configparser.ConfigParser()
-config.read("config.ini")
-
-check_interval_sec = int(config['Common']['check_interval_sec'])
-history_max_len = int(config['Common']['history_max_len'])
-low_HI_thres = float(config['HI']['low_HI_thres'])
-high_HI_thres = float(config['HI']['high_HI_thres'])
-AC_off_URL = config['Webhook']['AC_off']
-AC_on_URL = config['Webhook']['AC_on']
+cm = Common()
+check_interval_sec = int(cm.config['Common']['check_interval_sec'])
+history_max_len = int(cm.config['Common']['history_max_len'])
+low_HI_thres = float(cm.config['HI']['low_HI_thres'])
+high_HI_thres = float(cm.config['HI']['high_HI_thres'])
+AC_off_URL = cm.config['Webhook']['AC_off']
+AC_on_URL = cm.config['Webhook']['AC_on']
 
 state_on = 0  # 0 for unknown, 1 for on, -1 for off
 
-sht = Sht(config['Hardware']['SCK_BCM_num'], config['Hardware']['DATA_BCM_num'])
+sht = Sht(cm.config['Hardware']['SCK_BCM_num'], cm.config['Hardware']['DATA_BCM_num'])
 
 history = collections.deque(maxlen=history_max_len)
 

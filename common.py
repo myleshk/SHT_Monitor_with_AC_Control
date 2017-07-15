@@ -1,4 +1,9 @@
+import configparser
+
 class Common:
+    def __init__(self):
+        self.config = configparser.ConfigParser()
+        self.config.read("config.ini")
 
     def heatIndex(self, T_C, R):
         T_F = T_C * 1.8 + 32

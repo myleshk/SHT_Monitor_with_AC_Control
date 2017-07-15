@@ -3,18 +3,15 @@
 
 import sys
 import time
-import configparser
 from sht_sensor import Sht
 from datetime import datetime
 from common import Common
 
-config = configparser.ConfigParser()
-config.read("config.ini")
+cm = Common()
+check_interval_sec = int(cm.config['Common']['check_interval_sec'])
 
-check_interval_sec = int(config['Common']['check_interval_sec'])
-
-sht = Sht(config['Hardware']['SCK_BCM_num'],
-          config['Hardware']['DATA_BCM_num'])
+sht = Sht(cm.config['Hardware']['SCK_BCM_num'],
+          cm.config['Hardware']['DATA_BCM_num'])
 
 
 while True:
