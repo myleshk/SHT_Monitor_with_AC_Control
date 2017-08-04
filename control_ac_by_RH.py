@@ -50,22 +50,27 @@ while True:
 
             # do actions
 
-            if average_RH < low_RH_thres and state_on > -1:
+            try:
+                if average_RH < low_RH_thres and state_on > -1:
 
-                r = requests.get(AC_off_URL)
-                # print 'Turn off A/C'
-                state_on -= 1
+                    r = requests.get(AC_off_URL)
+                    # print 'Turn off A/C'
+                    state_on -= 1
 
-            elif average_RH > high_RH_thres and state_on < 1:
+                elif average_RH > high_RH_thres and state_on < 1:
 
-                r = requests.get(AC_on_URL)
-                # print 'Turn on A/C'
-                state_on += 1
+                    r = requests.get(AC_on_URL)
+                    # print 'Turn on A/C'
+                    state_on += 1
+            except Exception as e:
+                print "Failed to control A/C. Error as following:"
+                print e
+                
 
         # report
-        cm.reportRecord(temperature, humidity, state_on)
+        report_result = "Reported" if cm.reportRecord(temperature, humidity, state_on) else "Report Error"
 
-        print '{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}'.format(ts, temperature, humidity, HI, state_on)
+        print '{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}  {:s}'.format(ts, temperature, humidity, HI, state_on, report_result)
     else:
 
         print '{:s}  Failed to get reading. Try again!'.format(ts)

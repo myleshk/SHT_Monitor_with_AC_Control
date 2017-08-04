@@ -34,4 +34,9 @@ class Common:
         else:
             data = {timestamp: {"RH": humidity, "T_C": temperature, "AC": AC_state}}
 
-        self.fb.post('/records', data)
+        try:
+            self.fb.post('/records', data)
+        except Exception as e:
+            print e
+            return False
+        return True
