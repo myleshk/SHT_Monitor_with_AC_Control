@@ -19,7 +19,8 @@ AC_on_URL = cm.config['Webhook']['AC_on']
 
 state_on = 0  # 0 for unknown, 1 for on, -1 for off
 
-sht = Sht(cm.config['Hardware']['SCK_BCM_num'], cm.config['Hardware']['DATA_BCM_num'])
+sht = Sht(cm.config['Hardware']['SCK_BCM_num'],
+          cm.config['Hardware']['DATA_BCM_num'])
 
 history = collections.deque(maxlen=history_max_len)
 
@@ -52,21 +53,22 @@ while True:
             if average_HI < low_HI_thres and state_on > -1:
 
                 r = requests.get(AC_off_URL)
-                # print 'Turn off A/C'
+                # 'Turn off A/C'
                 state_on = -1
 
             elif average_HI > high_HI_thres and state_on < 1:
 
                 r = requests.get(AC_on_URL)
-                # print 'Turn on A/C'
+                # 'Turn on A/C'
                 state_on = 1
 
-        #report
+        # report
         cm.reportRecord(temperature, humidity, state_on)
-        print '{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}'.format(ts,
-                temperature, humidity, HI, state_on)
+        print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}'.format(
+            ts, temperature, humidity, HI, state_on
+        ))
     else:
 
-        print '{:s}  Failed to get reading. Try again!'.format(ts)
+        print('{:s}  Failed to get reading. Try again!'.format(ts))
 
     time.sleep(check_interval_sec)

@@ -37,6 +37,6 @@ class Common:
         try:
             self.fb.post('/records', data)
         except Exception as e:
-            print e
+            print(e)
             return False
         return True

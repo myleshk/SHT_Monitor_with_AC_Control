@@ -25,9 +25,11 @@ while True:
         HI = Common().heatIndex(temperature, humidity)
         # report
         cm.reportRecord(temperature, humidity)
-        print '{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}'.format(ts, temperature, humidity, HI)
+        print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}'.format(
+            ts, temperature, humidity, HI
+        ))
     else:
 
-        print '{:s} Failed to get reading. Try again!'.format(ts)
+        print('{:s} Failed to get reading. Try again!'.format(ts))
 
     time.sleep(check_interval_sec)
