@@ -1,14 +1,15 @@
 [Hardware]
 SCK_BCM_num = 4
 DATA_BCM_num = 27
+chip_model = DHT11
 
 [Common]
 check_interval_sec = 5
 history_max_len = 2
 
 [HI]
-low_HI_thres = 78.7
-high_HI_thres = 79
+low_HI_thres = 24
+high_HI_thres = 27
 
 [RH]
 low_RH_thres = 48
@@ -20,3 +21,4 @@ AC_on = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
 
 [Firebase]
 db_location = https://your-database-url.firebaseio.com/
+project_name = <name of the project>

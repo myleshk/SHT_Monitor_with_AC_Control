@@ -6,4 +6,6 @@ idna
 requests
 urllib3
 sht-sensor
-python-firebase
+firebase-admin
+heat-index
+adafruit-circuitpython-dht

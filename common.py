@@ -1,41 +1,42 @@
 import configparser
-from firebase import firebase
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 import time
+from heat_index import calculate
+from os import path
 
 
 class Common:
     def __init__(self):
-        self.config = configparser.ConfigParser()
-        self.config.read("config.ini")
-        self.fb = firebase.FirebaseApplication(
-            self.config['Firebase']['db_location'], None)
+        Common.config = configparser.ConfigParser()
+        Common.config.read("config.ini")
+        cred = credentials.Certificate(
+            path.join(path.dirname(__file__), 'serviceAccountKey.json')
+        )
+        app = firebase_admin.initialize_app(
+            credential=cred,
+            options={
+                'databaseURL': Common.config['Firebase']['db_location']
+            },
+            name=Common.config['Firebase']['project_name']
+        )
+        self.db = db.reference('records', app=app)
 
-    def heatIndex(self, T_C, R):
-        T_F = T_C * 1.8 + 32
-
-        c1 = -42.379
-        c2 = 2.04901523
-        c3 = 10.14333127
-        c4 = -0.22475541
-        c5 = -6.83783e-3
-        c6 = -5.481717e-2
-        c7 = 1.22874e-3
-        c8 = 8.5282e-4
-        c9 = -1.99e-6
-
-        return c1 + c2 * T_F + c3 * R + c4 * T_F * R + c5 * T_F ** 2 + c6 * R ** 2 + c7 * T_F ** 2 * R + c8 * T_F * R ** 2 + c9 * T_F ** 2 * R ** 2
+    @staticmethod
+    def heatIndex(temperature, humidity):
+        heat_index = calculate.from_celsius(temperature, humidity)
+        return round(heat_index, 2)
 
     def reportRecord(self, temperature, humidity, AC_state=None):
         timestamp = int(time.time())
 
-        data = {}
-        if AC_state is None:
-            data = {timestamp: {"RH": humidity, "T_C": temperature}}
-        else:
-            data = {timestamp: {"RH": humidity, "T_C": temperature, "AC": AC_state}}
+        data = {"RH": humidity, "T_C": temperature, "TS": timestamp}
+        if AC_state is not None:
+            data["AC"] = AC_state
 
         try:
-            self.fb.post('/records', data)
+            self.db.push(data)
         except Exception as e:
             print(e)
             return False

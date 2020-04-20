@@ -3,24 +3,23 @@
 
 import sys
 import time
-from sht_sensor import Sht
 from datetime import datetime
 import collections
 import requests
 from common import Common
+from sensor import Sensor
 
 cm = Common()
-check_interval_sec = int(cm.config['Common']['check_interval_sec'])
-history_max_len = int(cm.config['Common']['history_max_len'])
-low_RH_thres = float(cm.config['RH']['low_RH_thres'])
-high_RH_thres = float(cm.config['RH']['high_RH_thres'])
-AC_off_URL = cm.config['Webhook']['AC_off']
-AC_on_URL = cm.config['Webhook']['AC_on']
+check_interval_sec = int(Common.config['Common']['check_interval_sec'])
+history_max_len = int(Common.config['Common']['history_max_len'])
+low_RH_thres = float(Common.config['RH']['low_RH_thres'])
+high_RH_thres = float(Common.config['RH']['high_RH_thres'])
+AC_off_URL = Common.config['Webhook']['AC_off']
+AC_on_URL = Common.config['Webhook']['AC_on']
 
 state_on = 0  # 0 for unknown, 1 for on, -1 for off
 
-sht = Sht(cm.config['Hardware']['SCK_BCM_num'],
-          cm.config['Hardware']['DATA_BCM_num'])
+sensor = Sensor()
 
 history = collections.deque(maxlen=history_max_len)
 
@@ -28,11 +27,11 @@ while True:
 
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    humidity = sht.read_rh()
-    temperature = sht.read_t()
+    humidity = sensor.read_rh()
+    temperature = sensor.read_t()
 
     if humidity is not None and temperature is not None:
-        HI = Common().heatIndex(temperature, humidity)
+        HI = Common.heatIndex(temperature, humidity)
         history.append(humidity)
 
         # check for action
@@ -72,7 +71,6 @@ while True:
 
         print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}  {:s}'.format(ts, temperature, humidity, HI, state_on, report_result))
     else:
-
         print('{:s}  Failed to get reading. Try again!'.format(ts))
 
     time.sleep(check_interval_sec)
