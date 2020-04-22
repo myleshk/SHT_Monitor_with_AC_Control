@@ -62,7 +62,7 @@ while True:
                 state_on = 1
 
         # report
-        cm.reportRecord(temperature, humidity, state_on)
+        cm.reportRecord(temperature, humidity, HI, state_on)
         print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}'.format(
             ts, temperature, humidity, HI, state_on
         ))

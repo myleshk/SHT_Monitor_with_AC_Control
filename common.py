@@ -28,10 +28,10 @@ class Common:
         heat_index = calculate.from_celsius(temperature, humidity)
         return round(heat_index, 2)
 
-    def reportRecord(self, temperature, humidity, AC_state=None):
+    def reportRecord(self, temperature, humidity, HI, AC_state=None):
         timestamp = int(time.time())
 
-        data = {"RH": humidity, "T_C": temperature, "TS": timestamp}
+        data = {"RH": humidity, "T_C": temperature, "TS": timestamp, "HI": HI}
         if AC_state is not None:
             data["AC"] = AC_state
 

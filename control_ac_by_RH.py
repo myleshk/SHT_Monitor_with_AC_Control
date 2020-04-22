@@ -64,12 +64,14 @@ while True:
             except Exception as e:
                 print("Failed to control A/C. Error as following:")
                 print(e)
-                
 
         # report
-        report_result = "Reported" if cm.reportRecord(temperature, humidity, state_on) else "Report Error"
+        report_result = "Reported" if cm.reportRecord(
+            temperature, humidity, HI, state_on
+        ) else "Report Error"
 
-        print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}  {:s}'.format(ts, temperature, humidity, HI, state_on, report_result))
+        print('{:s}  Temp={:.2f}*C  RH={:.2f}%  HI={:.2f}  A/C State={:d}  {:s}'.format(
+            ts, temperature, humidity, HI, state_on, report_result))
     else:
         print('{:s}  Failed to get reading. Try again!'.format(ts))
 
