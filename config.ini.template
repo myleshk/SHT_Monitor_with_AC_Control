@@ -2,6 +2,7 @@
 SCK_BCM_num = 4
 DATA_BCM_num = 27
 chip_model = DHT11
+serial_path = /dev/ttyACM0
 
 [Common]
 check_interval_sec = 5
