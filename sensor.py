@@ -22,7 +22,7 @@ class ArduinoAsChip:
     def _read_from_serial(self):
         regex = r"^h:(?P<hum>[\d.]+),t:(?P<temp>[\d.]+)$"
         if time() - self.last_read >= 1 and self.serial.in_waiting > 0:
-            dataLine = self.serial.readline()
+            dataLine = self.serial.readline().decode('utf-8').strip() # need to strip off spaces and line break signs 
             matched = re.match(regex, dataLine)
             if matched:
                 self.rh = float(matched.group('hum'))
