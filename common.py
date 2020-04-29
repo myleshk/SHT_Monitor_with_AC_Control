@@ -8,6 +8,9 @@ from os import path
 
 
 class Common:
+    config_etag = None
+    hot_config = None
+
     def __init__(self):
         Common.config = configparser.ConfigParser()
         Common.config.read("config.ini")
@@ -21,7 +24,8 @@ class Common:
             },
             name=Common.config['Firebase']['project_name']
         )
-        self.db = db.reference('records', app=app)
+        self.records_db = db.reference('records', app=app)
+        self.config_db = db.reference('config', app=app)
 
     @staticmethod
     def heatIndex(temperature, humidity):
@@ -36,8 +40,27 @@ class Common:
             data["AC"] = AC_state
 
         try:
-            self.db.push(data)
+            self.records_db.push(data)
         except Exception as e:
             print(e)
             return False
         return True
+
+    def getHotConfig(self):
+        try:
+            if self.config_etag:
+                changed, data, new_etag = self.config_db.get_if_changed(
+                    self.config_etag
+                )
+                if changed:
+                    self.config_etag = new_etag
+                    self.hot_config = data
+            else:
+                data, new_etag = self.config_db.get(etag=True)
+                self.config_etag = new_etag
+                self.hot_config = data
+
+            return self.hot_config
+        except Exception as e:
+            print(e)
+            return None
