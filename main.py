@@ -25,19 +25,12 @@ sensor = Sensor()
 history = collections.deque(maxlen=history_max_len)
 
 
-def turn_off_AC():
+def toggle_AC(on):
+    global state_on
+    webhook_URL = AC_on_URL if on else AC_off_URL
     try:
-        r = requests.get(AC_off_URL)
-        state_on = -1
-    except Exception as e:
-        print("Failed to control A/C. Error as following:")
-        print(e)
-
-
-def turn_on_AC():
-    try:
-        r = requests.get(AC_on_URL)
-        state_on = 1
+        r = requests.get(webhook_URL)
+        state_on = 1 if on else -1
     except Exception as e:
         print("Failed to control A/C. Error as following:")
         print(e)
@@ -81,9 +74,9 @@ while True:
 
                 # do actions
                 if average_control_factor < low_factor_thres and state_on > -1:
-                    turn_off_AC()
+                    toggle_AC(False)
                 elif average_control_factor > high_factor_thres and state_on < 1:
-                    turn_on_AC()
+                    toggle_AC(True)
 
         # report
         cm.reportRecord(temperature, humidity, HI, state_on)
