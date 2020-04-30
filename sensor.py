@@ -17,12 +17,24 @@ class ArduinoAsChip:
     last_read = 0
 
     def __init__(self):
-        self.serial = serial.Serial(Common.config['Hardware']['serial_path'])
+        self.serial = serial.Serial(
+            Common.config['Hardware']['serial_path'],
+            timeout=0.1  # we don't need to wait for anything, so set timeout to 0
+        )
 
     def _read_from_serial(self):
-        regex = r"^h:(?P<hum>[\d.]+),t:(?P<temp>[\d.]+)$"
-        if time() - self.last_read >= 1 and self.serial.in_waiting > 0:
-            dataLine = self.serial.readline().decode('utf-8').strip() # need to strip off spaces and line break signs 
+        regex = r"^h:(?P<hum>[\d.]+),t:(?P<temp>[\d.]+)"
+        if time() - self.last_read >= 1:
+            # we should read
+            rawDataLine = None
+            while True:
+                # we only read the last line, so keep overwriting until no data in cache
+                if self.serial.in_waiting > 0:
+                    rawDataLine = self.serial.readline()
+                elif rawDataLine:
+                    break
+            # need to strip off spaces and line break signs
+            dataLine = rawDataLine.decode('utf-8').strip()
             matched = re.match(regex, dataLine)
             if matched:
                 self.rh = float(matched.group('hum'))
