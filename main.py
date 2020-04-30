@@ -25,7 +25,7 @@ sensor = Sensor()
 history = collections.deque(maxlen=history_max_len)
 
 
-def turn_off_AC:
+def turn_off_AC():
     try:
         r = requests.get(AC_off_URL)
         state_on = -1
@@ -34,7 +34,7 @@ def turn_off_AC:
         print(e)
 
 
-def turn_on_AC:
+def turn_on_AC():
     try:
         r = requests.get(AC_on_URL)
         state_on = 1
