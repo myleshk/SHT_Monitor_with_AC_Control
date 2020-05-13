@@ -12,10 +12,6 @@ from sensor import Sensor
 cm = Common()
 check_interval_sec = int(Common.config['Common']['check_interval_sec'])
 history_max_len = int(Common.config['Common']['history_max_len'])
-low_HI_thres = float(Common.config['HI']['low_HI_thres'])
-high_HI_thres = float(Common.config['HI']['high_HI_thres'])
-low_RH_thres = float(Common.config['RH']['low_RH_thres'])
-high_RH_thres = float(Common.config['RH']['high_RH_thres'])
 AC_off_URL = Common.config['Webhook']['AC_off']
 AC_on_URL = Common.config['Webhook']['AC_on']
 
@@ -50,8 +46,12 @@ while True:
         low_factor_thres = None
         high_factor_thres = None
 
-        # get control_type
+        # get hot configs
         control_type = cm.getHotConfig()['control_type']
+        low_HI_thres = float(cm.getHotConfig()['low_HI_thres'])
+        high_HI_thres = float(cm.getHotConfig()['high_HI_thres'])
+        low_RH_thres = float(cm.getHotConfig()['low_RH_thres'])
+        high_RH_thres = float(cm.getHotConfig()['high_RH_thres'])
 
         if control_type == 'HI':
             control_factor = HI
