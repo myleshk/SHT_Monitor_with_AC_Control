@@ -54,8 +54,8 @@ while True:
         high_RH_thres = float(cm.getHotConfig()['high_RH_thres'])
         
         # get hot configs from th
-        low_HI_thres = th.high_HI_thres()
-        high_HI_thres = th.low_HI_thres()
+        low_HI_thres = th.low_HI_thres()
+        high_HI_thres = th.high_HI_thres()
 
         if control_type == 'HI':
             control_factor = HI
