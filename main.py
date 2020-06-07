@@ -14,8 +14,9 @@ check_interval_sec = int(Common.config['Common']['check_interval_sec'])
 history_max_len = int(Common.config['Common']['history_max_len'])
 AC_off_URL = Common.config['Webhook']['AC_off']
 AC_on_URL = Common.config['Webhook']['AC_on']
+max_state = int(Common.config['Common']['max_state'])
 
-state_on = 0  # 0 for unknown, 1 for on, -1 for off
+state_on = 0  # 0 for unknown, positive for on, negative for off
 
 sensor = Sensor()
 history = collections.deque(maxlen=history_max_len)
@@ -26,7 +27,10 @@ def toggle_AC(on):
     webhook_URL = AC_on_URL if on else AC_off_URL
     try:
         r = requests.get(webhook_URL)
-        state_on = 1 if on else -1
+        if on:
+            state_on += 1
+        else:
+            state_on -= 1
     except Exception as e:
         print("Failed to control A/C. Error as following:")
         print(e)
@@ -73,9 +77,9 @@ while True:
                 average_control_factor = control_factor_sum / history_max_len
 
                 # do actions
-                if average_control_factor < low_factor_thres and state_on > -1:
+                if average_control_factor < low_factor_thres and state_on > -max_state:
                     toggle_AC(False)
-                elif average_control_factor > high_factor_thres and state_on < 1:
+                elif average_control_factor > high_factor_thres and state_on < max_state:
                     toggle_AC(True)
 
         # report
