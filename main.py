@@ -8,6 +8,7 @@ import collections
 import requests
 from common import Common
 from sensor import Sensor
+from timeBasedThreshold import Threshold
 
 cm = Common()
 check_interval_sec = int(Common.config['Common']['check_interval_sec'])
@@ -15,6 +16,7 @@ history_max_len = int(Common.config['Common']['history_max_len'])
 AC_off_URL = Common.config['Webhook']['AC_off']
 AC_on_URL = Common.config['Webhook']['AC_on']
 max_state = int(Common.config['Common']['max_state'])
+th = Threshold()
 
 state_on = 0  # 0 for unknown, positive for on, negative for off
 
@@ -52,10 +54,12 @@ while True:
 
         # get hot configs
         control_type = cm.getHotConfig()['control_type']
-        low_HI_thres = float(cm.getHotConfig()['low_HI_thres'])
-        high_HI_thres = float(cm.getHotConfig()['high_HI_thres'])
         low_RH_thres = float(cm.getHotConfig()['low_RH_thres'])
         high_RH_thres = float(cm.getHotConfig()['high_RH_thres'])
+        
+        # get hot configs from th
+        low_HI_thres = th.high_HI_thres()
+        high_HI_thres = th.low_HI_thres()
 
         if control_type == 'HI':
             control_factor = HI
