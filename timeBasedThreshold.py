@@ -1,10 +1,8 @@
-from common import Common
 from datetime import datetime, time
 
-
 class Threshold:
-    def __init__(self):
-        self.cm = Common()
+    def __init__(self, common):
+        self.cm = common
 
     def _is_daytime(self):
         current_time = datetime.now().time()

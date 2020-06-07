@@ -15,7 +15,7 @@ check_interval_sec = int(Common.config['Common']['check_interval_sec'])
 history_max_len = int(Common.config['Common']['history_max_len'])
 AC_off_URL = Common.config['Webhook']['AC_off']
 AC_on_URL = Common.config['Webhook']['AC_on']
-th = Threshold()
+th = Threshold(common=cm)
 
 state_on = 0  # 0 for unknown, 1 for on, -1 for off
 
