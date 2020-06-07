@@ -8,7 +8,7 @@ class Threshold:
 
     def _is_daytime(self):
         current_time = datetime.now().time()
-        return current_time > time(8, 10) and current_time < time(23, 30):
+        return current_time > time(8, 10) and current_time < time(23, 30)
 
     def high_HI_thres(self):
         return self._daytime_high_HI_thres() if self._is_daytime else self._night_high_HI_thres()
