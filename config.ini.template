@@ -7,7 +7,6 @@ serial_path = /dev/ttyACM0
 [Common]
 check_interval_sec = 5
 history_max_len = 2
-max_state = 2
 
 [Webhook]
 AC_off = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
