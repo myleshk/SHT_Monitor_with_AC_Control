@@ -9,8 +9,10 @@ check_interval_sec = 5
 history_max_len = 2
 
 [Webhook]
-AC_off = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
-AC_on = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
+AC_off_1 = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
+AC_on_1 = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
+AC_off_2 = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
+AC_on_2 = https://maker.ifttt.com/trigger/{event_name}/with/key/{your_key}
 
 [Firebase]
 db_location = https://your-database-url.firebaseio.com/
